@@ -1,15 +1,15 @@
-from typing import Callable, List, TypeVar, Any
+from typing import Callable, List, TypeVar, Any, Dict, Tuple
 import requests
 
 T = TypeVar('T')
 
 
-def generate_result_with_error_handling(conversation: List[dict[str:str]],
+def generate_result_with_error_handling(conversation: List[Dict[str, str]],
                                         extraction_function: Callable[[str, Any], T],
                                         api_key: str,
                                         openai_model: str,
                                         max_iterations=5) \
-        -> tuple[T, List[dict[str:str]]]:
+        -> Tuple[T, List[Dict[str, str]]]:
     error_history = []
     for iteration in range(max_iterations):
         response = generate_response_with_history(conversation, api_key, openai_model)

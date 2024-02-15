@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict, Tuple
 
 from utils.general_utils.openai_connection import generate_result_with_error_handling
 from utils.model_generation.code_extraction import extract_final_python_code, execute_code_and_get_variable
@@ -17,8 +17,8 @@ def extract_model_from_response(response: str, iteration: int) -> POWL:
     return result
 
 
-def generate_model(conversation: List[dict[str:str]], api_key: str, openai_model: str) \
-        -> tuple[POWL, List[dict[str:str]]]:
+def generate_model(conversation: List[Dict[str, str]], api_key: str, openai_model: str) \
+        -> Tuple[POWL, List[Dict[str, str]]]:
     return generate_result_with_error_handling(conversation=conversation,
                                                extraction_function=extract_model_from_response,
                                                api_key=api_key,

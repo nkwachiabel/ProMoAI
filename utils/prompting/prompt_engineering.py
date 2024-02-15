@@ -1,5 +1,5 @@
 import inspect
-from typing import List
+from typing import List, Dict
 
 from utils.prompting.shots import SHOTS
 
@@ -160,14 +160,14 @@ def create_model_generation_prompt(process_description: str) -> str:
     return prompt
 
 
-def create_conversation(process_description: str) -> List[dict[str:str]]:
+def create_conversation(process_description: str) -> List[Dict[str, str]]:
     prompt = create_model_generation_prompt(process_description)
     conversation = [{"role": "user", "content": f'{prompt}'}]
     print(prompt)
     return conversation
 
 
-def update_conversation(conversation: List[dict[str:str]], feedback: str) -> List[dict[str:str]]:
+def update_conversation(conversation: List[Dict[str, str]], feedback: str) -> List[Dict[str, str]]:
     update_prompt = "Please update the model to fix it based on the provided feedback. Please make sure the returned" \
                     " model matches the initial process description, all previously provided feedback, and the new" \
                     "feedback comment as well. Make sure to save the updated final model is the variable" \
