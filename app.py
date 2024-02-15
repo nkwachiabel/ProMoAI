@@ -3,14 +3,14 @@ import subprocess
 import streamlit as st
 
 from utils import LLMProcessModelGenerator
-from utils.petrinet.to_petri_net import apply as powl_to_pn
+from utils.petrinet.to_petri_net import apply as to_pn
 
 from pm4py.util import constants
-from utils.petrinet.pnml import export_petri_as_string
+from pm4py.objects.petri_net.exporter.exporter import pnml as pnml_exporter
+from pm4py.objects.conversion.wf_net.variants import to_bpmn
 from pm4py.visualization.petri_net import visualizer as pn_visualizer
 from pm4py.visualization.bpmn import visualizer as bpmn_visualizer
-from pm4py.objects.conversion.wf_net.variants.to_bpmn import apply as pn_to_bpmn
-from utils.bpmn.graphviz import layouter
+from pm4py.objects.bpmn.layout.variants import graphviz as bpmn_gv_layouter
 from pm4py.objects.bpmn.exporter.variants.etree import get_xml_string
 
 
@@ -74,9 +74,9 @@ def run_app():
             with col2:
                 st.write("Export Model")
                 powl = st.session_state['model_gen'].get_powl()
-                pn, im, fm = powl_to_pn(powl)
-                bpmn = pn_to_bpmn(pn, im, fm)
-                bpmn = layouter(bpmn)
+                pn, im, fm = to_pn(powl)
+                bpmn = to_bpmn.apply(pn, im, fm)
+                bpmn = bpmn_gv_layouter.apply(bpmn)
 
                 download_1, download_2 = st.columns(2)
                 with download_1:
@@ -90,7 +90,7 @@ def run_app():
                     )
 
                 with download_2:
-                    pn_data = export_petri_as_string(pn, im, fm)
+                    pn_data = pnml_exporter.export_petri_as_string(pn, im, fm)
                     st.download_button(
                         label="Download PNML",
                         data=pn_data,
